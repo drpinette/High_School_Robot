@@ -6,8 +6,9 @@
 #include <Wire.h>
 #include <Sensor.h>
 #include <Motor.h>
+#include <Condition.h>
 
-#define DEBUG
+//#define DEBUG
 //#undef DEBUG
 
 enum Rotation { NoRotation = 0, CW  = 1 /*Clockwise*/, CCW = -1 /*Counterclockwise*/ };
@@ -72,10 +73,15 @@ enum Side { NoSide = 0, Right = 1, Left = -1 };
 #define MOTOR_ORIGIN 1
 
 #define MAX_SPEED 255
-#define DEFAULT_SPEED (MAX_SPEED/2)
+#define TURN_CORRECTION_FACTOR 0.2
+#define SIDE_CORRECTION_FACTOR 0.2
+#define DEFAULT_SPEED ((int)(MAX_SPEED*(1.0-TURN_CORRECTION_FACTOR-SIDE_CORRECTION_FACTOR)))  //current 153
+#define WALL_SAFETY_MARGIN 4.0
+#define MAX_SIDE_CORRECTION (WALL_SAFETY_MARGIN/1.5)
 
 #define ABS(x) ((x)<0 ? -(x) : (x))
-#define SGN(x) ((x)<0 ? -1 : ((x)>0 ? x : 0))
+#define SGN(x) ((x)<0 ? -1 : ((x)>0 ? 1 : 0))
+#define MOD(x, m) (((x)%(m))<0 ? ((x)%(m))+m : ((x)%(m)))
 
 class RobotController
 {
@@ -83,12 +89,16 @@ public:
   void initialize();
   void go(Heading  heading, int speed, Side sideDirection, int sideSpeed, Rotation turnDirection, int turnSpeed); 
   void stop();
-  int readUv(int sensor);
+  int readUv(int sensorId);
   float readDistanceSonar(int sensorId);
-  void followWall(Side wallSide, Heading heading, int speed=DEFAULT_SPEED);
+  void followWall(Side wallSide, Heading heading, int speed, Condition* stopCondition);
+  void move(Heading heading, int speed, Condition* stopCondition);
+  int sonarIdAt(Heading heading, Side side, Rotation direction);
+  int uvIdAt(Heading heading);
+
 
 private:
-  Sensor sonar[NUM_SONAR];
+  Sensor sonarArray[NUM_SONAR];
   Sensor uv[NUM_UV];
   Motor motorArray[NUM_MOTOR];
   Adafruit_MotorShield motorController;
