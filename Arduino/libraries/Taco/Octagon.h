@@ -1,5 +1,5 @@
-#ifndef TACO_H
-#define TACO_H
+#ifndef OCTAGON_H
+#define OCTAGON_H
 /////////////////////////////////////////////////////////////////////////////
 #include <Arduino.h>
 #include <Adafruit_MotorShield.h>
@@ -29,21 +29,21 @@ enum Side { NoSide = 0, Right = 1, Left = -1 };
 // Digital I/O pin assignments
 #define AVAILABLE0 0
 #define AVAILABLE1 1
-#define AVAILABLE2 12
-#define START 11
-#define NORTH_CCW_SONAR 2
-#define NORTH_CW_SONAR 3
-#define EAST_CCW_SONAR 4
-#define EAST_CW_SONAR 5
-#define SOUTH_CCW_SONAR 6
-#define SOUTH_CW_SONAR 7
-#define WEST_CCW_SONAR 8
-#define WEST_CW_SONAR 9
-#define EXTINGUISHER 10
+//#define AVAILABLE2 12
+//#define START 11
+#define NORTH_CCW_SONAR 4
+#define NORTH_CW_SONAR 5
+#define EAST_CCW_SONAR 6
+#define EAST_CW_SONAR 7
+#define SOUTH_CCW_SONAR 8
+#define SOUTH_CW_SONAR 9
+#define WEST_CCW_SONAR 10
+#define WEST_CW_SONAR 11
+#define EXTINGUISHER 12
 #define LED 13
 
 #define NUM_SONAR 8
-#define SONAR_ORIGIN 2
+#define SONAR_ORIGIN 4
 
 // Analog I/O pin assignments
 #define NORTH_UV 0

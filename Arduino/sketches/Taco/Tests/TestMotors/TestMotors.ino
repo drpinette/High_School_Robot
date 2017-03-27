@@ -1,5 +1,5 @@
 #define DEBUG
-#include <Taco.h>
+#include <Octagon.h>
 #include <Arduino.h>
 #include <Adafruit_MotorShield.h>
 #include <Wire.h>
@@ -9,31 +9,31 @@ RobotController* RC;
 void setup() {
   RC = new RobotController();
   RC->initialize();
-  delay(5000);
+  delay(3000);
   Serial.begin(9600);
   
   RC->go(North, DEFAULT_SPEED, NoSide, 0, NoRotation, 0);
   delay(2000);
   RC->stop();
  
-  RC->go(East, DEFAULT_SPEED, NoSide, 0, NoRotation, 0);
-  delay(2000);
-  RC->stop();
-  
-  RC->go(South, DEFAULT_SPEED, NoSide, 0, NoRotation, 0);
-  delay(2000);
-  RC->stop();
-
-  RC->go(West, DEFAULT_SPEED, NoSide, 0, NoRotation, 0);
-  delay(2000);
-  RC->stop();
- 
-  RC->go(North, 0, NoSide, 0, CW, DEFAULT_SPEED);
-  delay(2000);
-  RC->stop();
-  RC->go(North, 0, NoSide, 0, CCW, DEFAULT_SPEED);
-  delay(2000);
-  RC->stop();
+//  RC->go(East, DEFAULT_SPEED, NoSide, 0, NoRotation, 0);
+//  delay(2000);
+//  RC->stop();
+//  
+//  RC->go(South, DEFAULT_SPEED, NoSide, 0, NoRotation, 0);
+//  delay(2000);
+//  RC->stop();
+//
+//  RC->go(West, DEFAULT_SPEED, NoSide, 0, NoRotation, 0);
+//  delay(2000);
+//  RC->stop();
+// 
+//  RC->go(North, 0, NoSide, 0, CW, DEFAULT_SPEED);
+//  delay(2000);
+//  RC->stop();
+//  RC->go(North, 0, NoSide, 0, CCW, DEFAULT_SPEED);
+//  delay(2000);
+//  RC->stop();
   
 }
 

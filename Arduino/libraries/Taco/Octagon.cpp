@@ -1,5 +1,5 @@
-//#define DEBUG
-#include <Taco.h>
+#define DEBUG
+#include <Octagon.h>
 
 void RobotController::initialize()
 {
@@ -35,7 +35,7 @@ void RobotController::go(Heading  heading, int speed, Side sideDirection, int si
   int motorControllerOffset = (int)heading - (int)North;
   //Serial.println(motorControllerOffset);
   Motor* motorLeftFront = &(motorArray[motorControllerOffset+0]);
-Motor* motorRightFront = &(motorArray[MOD(motorControllerOffset+1, 4)]);
+  Motor* motorRightFront = &(motorArray[MOD(motorControllerOffset+1, 4)]);
   Motor* motorRightBack = &(motorArray[MOD(motorControllerOffset+2, 4)]);
   Motor* motorLeftBack = &(motorArray[MOD(motorControllerOffset+3, 4)]);
   motorLeftFront->run(directionLeftFront, speedLeftFront);
@@ -112,7 +112,7 @@ void RobotController::followWall(Side wallSide, Heading heading, int speed, Cond
 	Side sideDirection = sideDifference > 0 ? (wallSide == Right ? Left : Right) : (wallSide == Right ? Right : Left);
 	Rotation turnDirection = (Rotation)SGN(angleDifference);
 	int sideSpeed = (int)ABS(SIDE_CORRECTION_FACTOR * speed * (sideDifference / MAX_SIDE_CORRECTION));
-	int turnSpeed = (int)ABS(TURN_CORRECTION_FACTOR * speed * (angleDifference / 0.5));
+	int turnSpeed = (int)ABS(TURN_CORRECTION_FACTOR * speed * (angleDifference / 1));
 	_D(turnDirection); _D(turnSpeed); _NL;
 	_D(sideSpeed); _D(sideDirection); _NL;
 	go(heading, speed, sideDirection, sideSpeed, turnDirection, turnSpeed);
