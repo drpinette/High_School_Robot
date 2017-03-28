@@ -1,5 +1,5 @@
 #define DEBUG
-#include <Taco.h>
+#include <Null.h>
 #include <Arduino.h>
 #include <Adafruit_MotorShield.h>
 #include <Wire.h>
@@ -9,32 +9,37 @@ RobotController* RC;
 void setup() {
   RC = new RobotController();
   RC->initialize();
-  delay(5000);
+  delay(1000);
   Serial.begin(9600);
-  
-  RC->go(North, DEFAULT_SPEED, NoSide, 0, NoRotation, 0);
-  delay(4000);
-  RC->stop();
  
-  RC->go(North, 0, Right, DEFAULT_SPEED, NoRotation, 0);
+  RC->go(North, 0, Left, SLOW_SPEED, NoRotation, 0);
   delay(4000);
   RC->stop();
-  
+  digitalWrite(13, HIGH);
+  delay(500);
+  digitalWrite(13, LOW);
+/* 
   RC->go(South, DEFAULT_SPEED, NoSide, 0, NoRotation, 0);
   delay(4000);
   RC->stop();
+  digitalWrite(13, HIGH);
+  delay(500);
+  digitalWrite(13, LOW);
 
-  RC->go(North, 0, Left, DEFAULT_SPEED, NoRotation, 0);
+  RC->go(East, 0, Left, DEFAULT_SPEED, NoRotation, 0);
   delay(4000);
   RC->stop();
+  digitalWrite(13, HIGH);
+  delay(500);
+  digitalWrite(13, LOW);
  
-  RC->go(North, 0, NoSide, 0, CW, DEFAULT_SPEED);
-  delay(2000);
+  RC->go(West, 0, Left, DEFAULT_SPEED, NoRotation, 0);
+  delay(4000);
   RC->stop();
-  RC->go(North, 0, NoSide, 0, CCW, DEFAULT_SPEED);
-  delay(2000);
-  RC->stop();
-  
+  digitalWrite(13, HIGH);
+  delay(500);
+  digitalWrite(13, LOW);
+  */
 }
 
 void loop() {
