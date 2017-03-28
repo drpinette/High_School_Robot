@@ -1,4 +1,4 @@
-#include <Null.h>
+#include <Taco.h>
 
 void RobotController::initialize()
 {
@@ -15,9 +15,9 @@ void RobotController::go(Heading  heading, int speed, Side sideDirection, int si
 {
   // The robot is always going "forward" (in the heading direction).  Compute speeds in a generic 
   // forward direction, then assign speeds to the actual motor controllers for the given heading.
-  int speedLeftFront =  speed + (-(int)sideDirection)*sideSpeed + (-(int)turnDirection)*turnSpeed;
+  int speedLeftFront =  -speed + (-(int)sideDirection)*sideSpeed + (-(int)turnDirection)*turnSpeed;
   int speedRightFront =  speed + (-(int)sideDirection)*sideSpeed + (-(int)turnDirection)*turnSpeed;
-  int speedLeftBack =   speed +  ((int)sideDirection)*sideSpeed + (-(int)turnDirection)*turnSpeed;
+  int speedLeftBack =   -speed +  ((int)sideDirection)*sideSpeed + (-(int)turnDirection)*turnSpeed;
   int speedRightBack =   speed +  ((int)sideDirection)*sideSpeed + (-(int)turnDirection)*turnSpeed;
   int directionLeftFront = speedLeftFront < 0 ? BACKWARD : FORWARD;
   int directionRightFront = speedRightFront < 0 ? BACKWARD : FORWARD;
@@ -37,10 +37,10 @@ void RobotController::go(Heading  heading, int speed, Side sideDirection, int si
   Motor motorRightFront = motorArray[(motorControllerOffset+1) % 4];
   Motor motorRightBack = motorArray[(motorControllerOffset+2) % 4];
   Motor motorLeftBack = motorArray[(motorControllerOffset+3) % 4];
-  motorLeftFront.run(directionLeftFront, speedLeftFront); //Test on Tuesday
-  motorRightFront.run(directionRightFront, speedRightFront); //test on tues
-  motorRightBack.run(directionRightBack, speedRightBack); //test on tues
-  motorLeftBack.run(directionLeftBack, speedLeftBack); //test on tues
+  motorLeftFront.run(directionLeftFront, speedLeftFront);
+  motorRightFront.run(directionRightFront, speedRightFront);
+  motorRightBack.run(directionRightBack, speedRightBack);
+  motorLeftBack.run(directionLeftBack, speedLeftBack);
   _DS(motorArray[0].curSpeed);_DS(motorArray[1].curSpeed);_DS(motorArray[2].curSpeed);_DS(motorArray[3].curSpeed);_NL;
   _DS(motorArray[0].curDirection);_DS(motorArray[1].curDirection);_DS(motorArray[2].curDirection);_DS(motorArray[3].curDirection);_NL;
 }
@@ -90,28 +90,6 @@ float RobotController::readDistanceSonar(int sensorId)
 
 void RobotController::followWall(Side wallSide, Heading heading, int speed)
 {
-  /*float sideCorrectionFactor = .2;
-  float turnCorrectionFactor = .2;
-  int sonarOffset = (int)heading - (int)Heading.North;
-  int wallOffset = wallSide == Side.Left ? 4:0;
-  int sonarPinCCW = (2+wallOffset + 2*sonarOffset % 8) + SONAR_ORIGIN
-  int sonarPinCW = (3+wallOffset + 2*sonarOffset % 8) + SONAR_ORIGIN
-  
-  while (1){
-	float distanceCCW = readDistanceSonar(sonarPinCCW);
-	float distanceCW = readDistanceSonar(sonarPinCW);
-	float distance = (distanceCCW + distanceCW)/2;
-	
-	float sideDifference = distance <WALL_SAFETY_MARGIN ? WALL_SAFETY_MARGIN - distance : 0;
-	float angleDifference = distanceCCW - distanceCW;
-	Side sideDirection = sideDifference > 0 ? (wallSide == Left ? Right : Left) : NoSide;
-	Rotation turnDirection =(Rotation)SGN(angleDifference);
-	int sideSpeed = (int)(sideCorrectionFactor * speed * (sideDifference / WALL_SAFETY_MARGIN));
-	int turnSpeed = (int)(turnCorrectionFactor * speed * (angleDifference / 8.0));
-	go(heading, speed, sideDirection, sideSpeed, turnDirection, turnSpeed);
-  }*/
+  // TODO Implement
 }
 
-void RobotController::runMotor(int motorId, int direction, int speed){
-	motorArray[motorId].run(direction, speed);
-}

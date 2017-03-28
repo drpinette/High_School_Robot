@@ -1,5 +1,5 @@
-#ifndef NULL_H
-#define NULL_H
+#ifndef TACO_H
+#define TACO_H
 /////////////////////////////////////////////////////////////////////////////
 #include <Arduino.h>
 #include <Adafruit_MotorShield.h>
@@ -72,13 +72,10 @@ enum Side { NoSide = 0, Right = 1, Left = -1 };
 #define MOTOR_ORIGIN 1
 
 #define MAX_SPEED 255
-#define SLOW_SPEED 127
-#define DEFAULT_SPEED 255 //((int)(MAX_SPEED*(1.0-TURN_CORRECTION_FACTOR-SIDE_CORRECTION_FACTOR)))
-//#define TURN_CORRECTION_FACTOR
-//#define SIDE_CORRECTION_FACTOR
+#define DEFAULT_SPEED (MAX_SPEED/2)
 
 #define ABS(x) ((x)<0 ? -(x) : (x))
-#define SGN(x) ((x)<0 ? -1 : ((x)>0 ? 1 : 0))
+#define SGN(x) ((x)<0 ? -1 : ((x)>0 ? x : 0))
 
 class RobotController
 {
@@ -88,7 +85,6 @@ public:
   void stop();
   int readUv(int sensor);
   float readDistanceSonar(int sensorId);
-  void runMotor(int motorId, int direction, int speed);
   void followWall(Side wallSide, Heading heading, int speed=DEFAULT_SPEED);
 
 private:

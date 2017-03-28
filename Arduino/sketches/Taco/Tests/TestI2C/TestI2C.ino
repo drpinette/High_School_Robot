@@ -31,7 +31,6 @@
 void setup()
 {
   Wire.begin();
-  delay(3000);
 
   Serial.begin(9600);
   char inChar = 0;
