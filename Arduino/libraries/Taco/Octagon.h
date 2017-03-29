@@ -49,9 +49,10 @@ enum Side { NoSide = 0, Right = 1, Left = -1 };
 #define NORTH_UV 0
 #define EAST_UV 1
 #define SOUTH_UV 2
-#define WEST_UV 3
-#define UNASSIGNED1 4
-#define UNASSIGNED2 5
+//#define WEST_UV 3
+//#define UNASSIGNED 4
+#define SOUND_PIN 3
+
 
 #define NUM_UV 4
 #define UV_ORIGIN 0
@@ -87,6 +88,7 @@ class RobotController
 {
 public:
   void initialize();
+  void waitForStart();
   void go(Heading  heading, int speed, Side sideDirection, int sideSpeed, Rotation turnDirection, int turnSpeed); 
   void stop();
   int readUv(int sensorId);
@@ -95,7 +97,8 @@ public:
   void move(Heading heading, int speed, Condition* stopCondition);
   int sonarIdAt(Heading heading, Side side, Rotation direction);
   int uvIdAt(Heading heading);
-
+  void rotate(int speed, Condition* stopCondition);
+  
 
 private:
   Sensor sonarArray[NUM_SONAR];

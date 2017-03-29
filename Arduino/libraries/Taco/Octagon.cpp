@@ -46,6 +46,22 @@ void RobotController::go(Heading  heading, int speed, Side sideDirection, int si
   //_DS(motorArray[0].curDirection);_DS(motorArray[1].curDirection);_DS(motorArray[2].curDirection);_DS(motorArray[3].curDirection);_NL;
 }
 
+void RobotController::rotate(int speed, Condition* stopCondition)
+{
+	while(stopCondition != NULL && !stopCondition->test())
+	{
+		Motor* motorLeftFront = &motorArray[0];
+		Motor* motorLeftBack = &motorArray[1];
+		Motor* motorRightFront = &motorArray[2];
+		Motor* motorRightBack = &motorArray[3];
+		motorLeftFront->run(BACKWARD, speed);
+		motorLeftBack->run(BACKWARD, speed);
+		motorRightFront->run(BACKWARD, speed);
+		motorRightBack->run(BACKWARD, speed);
+	}
+	
+}
+
 void RobotController::stop()
 {
   for (int i = 0; i < NUM_MOTOR; i++) motorArray[i].run(BRAKE, 0);
@@ -162,3 +178,39 @@ void RobotController::move(Heading heading, int speed, Condition* stopCondition)
 		go(heading, speed, sideDirection, sideSpeed, NoRotation, 0);
 	}
 }
+	
+void RobotController::waitForStart()
+	{
+	int count=0;
+	bool stayInLoop = false;
+	while(!stayInLoop){
+		if(analogRead(SOUND_PIN)>300){
+			for (int i = 0; i < 400; i++){
+				Serial.println(count);
+				delay(5);
+				if(analogRead(SOUND_PIN)>300){
+					count++;
+					}
+				if(count>200){
+					stayInLoop = true;
+				}
+			}
+			count = 0;
+		}
+		delay(5);
+	}
+	//Turn on situational awareness LED, then turn it off
+	pinMode(12, OUTPUT);
+	digitalWrite(12, HIGH);
+	delay(2000);
+	digitalWrite(12, LOW);
+/* 	int x = 1000;
+	for(int i=0; i<20; i++){
+		digitalWrite(12, HIGH);
+		delay(x);
+		digitalWrite(12, LOW);
+		delay(x); 
+	}*/
+}
+
+
