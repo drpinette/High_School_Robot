@@ -46,12 +46,13 @@ enum Side { NoSide = 0, Right = 1, Left = -1 };
 #define SONAR_ORIGIN 4
 
 // Analog I/O pin assignments
-#define NORTH_UV 0
-#define EAST_UV 1
-#define SOUTH_UV 2
-//#define WEST_UV 3
-//#define UNASSIGNED 4
+#define LEFT_UV 0
+#define RIGHT_UV 1
+//#define UNASSIGNED 2
 #define SOUND_PIN 3
+//#define UNASSIGNED 4
+//#define UNASSIGNED 5
+
 
 
 #define NUM_UV 4
@@ -76,7 +77,8 @@ enum Side { NoSide = 0, Right = 1, Left = -1 };
 #define MAX_SPEED 255
 #define TURN_CORRECTION_FACTOR 0.2
 #define SIDE_CORRECTION_FACTOR 0.2
-#define DEFAULT_SPEED ((int)(MAX_SPEED*(1.0-TURN_CORRECTION_FACTOR-SIDE_CORRECTION_FACTOR)))  //current 153
+//#define DEFAULT_SPEED ((int)(MAX_SPEED*(1.0-TURN_CORRECTION_FACTOR-SIDE_CORRECTION_FACTOR)))  //current 153
+#define DEFAULT_SPEED 255
 #define WALL_SAFETY_MARGIN 4.0
 #define MAX_SIDE_CORRECTION (WALL_SAFETY_MARGIN/1.5)
 

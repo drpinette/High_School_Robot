@@ -58,8 +58,13 @@ void RobotController::rotate(int speed, Condition* stopCondition)
 		motorLeftBack->run(BACKWARD, speed);
 		motorRightFront->run(BACKWARD, speed);
 		motorRightBack->run(BACKWARD, speed);
+		
+		if(readUv(LEFT_UV) >= 40 || readUv(RIGHT_UV) >= 40){
+			stop();
+			digitalWrite(13, HIGH);
+			break;
+		}
 	}
-	
 }
 
 void RobotController::stop()
@@ -70,8 +75,9 @@ void RobotController::stop()
 
 int RobotController::readUv(int sensorId)
 {
-  int sensorIndex = sensorId - UV_ORIGIN;
-  return uv[sensorIndex].update(analogRead(sensorId));
+  //int sensorIndex = sensorId - UV_ORIGIN;
+  //return uv[sensorIndex].update(analogRead(sensorId));
+  return analogRead(sensorId);
 }
 
 float RobotController::readDistanceSonar(int sensorId)
@@ -178,6 +184,9 @@ void RobotController::move(Heading heading, int speed, Condition* stopCondition)
 		go(heading, speed, sideDirection, sideSpeed, NoRotation, 0);
 	}
 }
+
+//void RobotController::extinguish()
+
 	
 void RobotController::waitForStart()
 	{

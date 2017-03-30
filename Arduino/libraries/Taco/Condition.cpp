@@ -78,3 +78,42 @@ bool False::test()
 {
   return false;
 }
+
+MoveBy::MoveBy(int sonarId, float distanceToMove, RobotController* robotController)
+{
+  this->sonarId = sonarId;
+  this->initialDistance = 0;
+  this->distanceToMove = distanceToMove;
+  this->robotController = robotController;
+}
+
+bool MoveBy::test() 
+{
+  if (initialDistance == 0) {
+    initialDistance = robotController->readDistanceSonar(sonarId);
+	delay(10);
+    return false;
+  }
+  else{
+    bool result = Compare(initialDistance - robotController->readDistanceSonar(sonarId), MoreThan, distanceToMove);
+    delay(10);
+    return result;
+  }
+}
+
+/*
+TestForCandle::TestForCandle(int sensorId1, int sensorId2 RobotController* robotController)
+{
+  this->sensorId1 = sensorId1;
+  this->sensorId2 = sensorId2;
+  this->robotController = robotController;
+}
+
+bool TestForCandle::test() 
+{
+  bool result = robotController->readUv(sensorId1) >= 40 || robotController->readUv(sensorId2);
+  return result;
+}
+*/
+
+

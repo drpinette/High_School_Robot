@@ -59,5 +59,18 @@ class False : public Condition
 public:
   bool test();
 };
+
+class MoveBy : public Condition
+{
+public:
+  MoveBy(int sonarId, float distanceToMove, RobotController* robotController);
+  bool test();
+private:
+  int sonarId;
+  float distanceToMove;
+  float initialDistance;
+  RobotController* robotController;
+};
+
 /////////////////////////////////////////////////////////////////////////////
 #endif
