@@ -54,24 +54,13 @@ void RobotController::go(Heading  heading, int speed, Side sideDirection, int si
   //_DS(motorArray[0].curDirection);_DS(motorArray[1].curDirection);_DS(motorArray[2].curDirection);_DS(motorArray[3].curDirection);_NL;
 }
 
-void RobotController::rotate(int speed, Condition* stopCondition)
+void RobotController::rotate(int speed, Rotation turnDirection, Condition* stopCondition)
 {
 	while(stopCondition != NULL && !stopCondition->test()) 
 	{
-		Motor* motorLeftFront = &motorArray[0];
-		Motor* motorLeftBack = &motorArray[1];
-		Motor* motorRightFront = &motorArray[2];
-		Motor* motorRightBack = &motorArray[3];
-		motorLeftFront->run(BACKWARD, speed);
-		motorLeftBack->run(BACKWARD, speed);
-		motorRightFront->run(BACKWARD, speed);
-		motorRightBack->run(BACKWARD, speed);
-		/* if(readUv(LEFT_UV) >= 60 || readUv(RIGHT_UV) >= 60)
-		{
-			stop();
-			digitalWrite(13, HIGH);
-			break; 
-		}*/
+		go(North, 0, NoSide, 0, turnDirection, speed);
+		
+		maxUv = MAX(maxUv, readUv(RIGHT_UV));
 	}
 	if (stopCondition != NULL) delete stopCondition;
 }
@@ -167,7 +156,7 @@ void RobotController::followCandle(int speed, Condition* stopCondition)
 	
 	Rotation turnDirection = (Rotation)SGN(uvDifference);
 	int turnSpeed = (int)ABS(TURN_CORRECTION_FACTOR * speed);
-	go(North, speed, NoSide, 0, turnDirection, turnSpeed);
+	go(North, 0, NoSide, 0, turnDirection, turnSpeed);
   }
   if (stopCondition != NULL) delete stopCondition;
 }
@@ -250,6 +239,14 @@ void RobotController::waitForStart()
 		digitalWrite(12, LOW);
 		delay(x); 
 	}*/
+}
+
+void RobotController::extinguish(bool on)
+{
+servo.attach(EXTINGUISHER);
+servo.write(on ? 180 : 0);
+delay(on ? 2000 : 2000);
+servo.detach();
 }
 
 
