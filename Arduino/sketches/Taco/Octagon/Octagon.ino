@@ -51,17 +51,16 @@ void setup() {
   RC->move(North, DEFAULT_SPEED, new DistanceFor(RC->sonarIdAt(North, Right, CCW), LessThan, 8.0, RC)); //Front Sensor Finds Wall
   RC->stop();
   delay(2000);
-  
   RC->move(North, DEFAULT_SPEED, new DistanceFor(RC->sonarIdAt(North, Right, CW), LessThan, 8.0, RC));  //Back Sensor Finds Wall
   RC->stop();
   delay(2000);
-  
   RC->followWall(Right, North, DEFAULT_SPEED, new DistanceFor(RC->sonarIdAt(North, Right, CCW), MoreThan, 9, RC));  //Front Sensor Loses Wall
   RC->stop();
   delay(2000);
-  RC->move(North, DEFAULT_SPEED, new DistanceFor(RC->sonarIdAt(North, NoSide, CW), LessThan, 5.0, RC));   //Move until north hits wall.
+  RC->move(North, DEFAULT_SPEED, new DistanceFor(RC->sonarIdAt(North, NoSide, CW), LessThan, 4.0, RC));   //Move until north hits wall.
   RC->stop();
   delay(2000);
+  
   RC->followWall(Left, East, DEFAULT_SPEED, new DistanceFor(RC->sonarIdAt(East, NoSide, CW), LessThan, 21.0, RC));
   RC->stop();
   delay(2000);
