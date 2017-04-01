@@ -4,7 +4,7 @@
 
 bool Condition::Compare(float value1, Comparison comparison, float value2)
 {
-	//_D(value1); _D(comparison); _D(value2); _NL;
+  _D(value1); _D(comparison); _D(value2); _NL;
   switch (comparison) {
   case Same: return value1 == value2;
   case Different: return value1 != value2;

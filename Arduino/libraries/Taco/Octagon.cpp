@@ -24,16 +24,24 @@ void RobotController::go(Heading  heading, int speed, Side sideDirection, int si
   int directionRightFront = speedRightFront < 0 ? BACKWARD : FORWARD;
   int directionLeftBack = speedLeftBack < 0 ? BACKWARD : FORWARD;
   int directionRightBack = speedRightBack < 0 ? BACKWARD : FORWARD;
-  _D(speedLeftFront);_D(speedRightFront);_D(speedRightBack);_D(speedLeftBack);_NL;
-  _D(directionLeftFront);_D(directionRightFront);_D(directionLeftBack);_D(directionRightBack);_NL;
- speedLeftFront = ABS(speedLeftFront);
- speedRightFront = ABS(speedRightFront);
- speedLeftBack = ABS(speedLeftBack);  
- speedRightBack = ABS(speedRightBack);
+  //_D(speedLeftFront);_D(speedRightFront);_D(speedRightBack);_D(speedLeftBack);_NL;
+  //_D(directionLeftFront);_D(directionRightFront);_D(directionLeftBack);_D(directionRightBack);_NL;
+ 
+  speedLeftFront = ABS(speedLeftFront);
+  speedRightFront = ABS(speedRightFront);
+  speedLeftBack = ABS(speedLeftBack);  
+  speedRightBack = ABS(speedRightBack);
 
+  // Scale the speeds so the fastest wheel is always at the default speed
+  int maxSpeed = MAX(MAX(speedLeftFront, speedRightFront),MAX(speedLeftBack, speedRightBack));
+  float speedScaling = ((float)DEFAULT_SPEED )/ ((float)maxSpeed);
+  speedLeftFront = (int)(speedScaling * speedLeftFront);
+  speedRightFront = (int)(speedScaling * speedRightFront);
+  speedLeftBack = (int)(speedScaling * speedLeftBack);
+  speedRightBack = (int)(speedScaling * speedRightBack);
+ 
   // Now assign speeds to motor controllers
   int motorControllerOffset = (int)heading - (int)North;
-  //Serial.println(motorControllerOffset);
   Motor* motorLeftFront = &(motorArray[motorControllerOffset+0]);
   Motor* motorRightFront = &(motorArray[MOD(motorControllerOffset+1, 4)]);
   Motor* motorRightBack = &(motorArray[MOD(motorControllerOffset+2, 4)]);
@@ -48,7 +56,7 @@ void RobotController::go(Heading  heading, int speed, Side sideDirection, int si
 
 void RobotController::rotate(int speed, Condition* stopCondition)
 {
-	while(stopCondition != NULL && !stopCondition->test())
+	while(stopCondition != NULL && !stopCondition->test()) 
 	{
 		Motor* motorLeftFront = &motorArray[0];
 		Motor* motorLeftBack = &motorArray[1];
@@ -58,13 +66,14 @@ void RobotController::rotate(int speed, Condition* stopCondition)
 		motorLeftBack->run(BACKWARD, speed);
 		motorRightFront->run(BACKWARD, speed);
 		motorRightBack->run(BACKWARD, speed);
-		
-		if(readUv(LEFT_UV) >= 40 || readUv(RIGHT_UV) >= 40){
+		/* if(readUv(LEFT_UV) >= 60 || readUv(RIGHT_UV) >= 60)
+		{
 			stop();
 			digitalWrite(13, HIGH);
-			break;
-		}
+			break; 
+		}*/
 	}
+	if (stopCondition != NULL) delete stopCondition;
 }
 
 void RobotController::stop()
@@ -109,6 +118,7 @@ float RobotController::readDistanceSonar(int sensorId)
   sonarArray[sensorIndex].prevVal = sonarArray[sensorIndex].curVal;
   sonarArray[sensorIndex].curVal = distance;
   return distance;
+  delay(10);
 }
 
 void RobotController::followWall(Side wallSide, Heading heading, int speed, Condition* stopCondition)
@@ -125,7 +135,7 @@ void RobotController::followWall(Side wallSide, Heading heading, int speed, Cond
 	delay(10);  //added delay to prevent signal interference
 	float distanceCW = readDistanceSonar(sonarPinCW);
 	delay(10);  //added delay to prevent signal interference
-	_D(distanceCCW); _NL; _D(distanceCW); _NL;
+	//_D(distanceCCW); _NL; _D(distanceCW); _NL;
 	
 	float distanceAver = (distanceCCW + distanceCW)/2;
 	float sideDifference = WALL_SAFETY_MARGIN - distanceAver;
@@ -135,13 +145,33 @@ void RobotController::followWall(Side wallSide, Heading heading, int speed, Cond
 	Rotation turnDirection = (Rotation)SGN(angleDifference);
 	int sideSpeed = (int)ABS(SIDE_CORRECTION_FACTOR * speed * (sideDifference / MAX_SIDE_CORRECTION));
 	int turnSpeed = (int)ABS(TURN_CORRECTION_FACTOR * speed * (angleDifference / 1));
-	_D(turnDirection); _D(turnSpeed); _NL;
-	_D(sideSpeed); _D(sideDirection); _NL;
+	//_D(turnDirection); _D(turnSpeed); _NL;
+	//_D(sideSpeed); _D(sideDirection); _NL;
 	go(heading, speed, sideDirection, sideSpeed, turnDirection, turnSpeed);
   }
   // Delete the condition object, since we're done with it
  if (stopCondition != NULL) delete stopCondition;
 }
+
+void RobotController::followCandle(int speed, Condition* stopCondition)
+{
+  float leftUvSensor = readUv(LEFT_UV);
+  float rightUvSensor = readUv(RIGHT_UV);
+    
+  while(stopCondition != NULL && !stopCondition->test())
+  {
+	float leftUvSensor = readUv(LEFT_UV);
+    float rightUvSensor = readUv(RIGHT_UV);
+	float uvAver = (leftUvSensor + rightUvSensor)/2;
+	float uvDifference = rightUvSensor - leftUvSensor;
+	
+	Rotation turnDirection = (Rotation)SGN(uvDifference);
+	int turnSpeed = (int)ABS(TURN_CORRECTION_FACTOR * speed);
+	go(North, speed, NoSide, 0, turnDirection, turnSpeed);
+  }
+  if (stopCondition != NULL) delete stopCondition;
+}
+
 
 int RobotController::sonarIdAt(Heading heading, Side side, Rotation direction)
 {
@@ -180,7 +210,7 @@ void RobotController::move(Heading heading, int speed, Condition* stopCondition)
 				delay(10);
 			}
 		}
-		_D(sideSpeed); _D(sideDirection); _NL;
+		//_D(sideSpeed); _D(sideDirection); _NL;
 		go(heading, speed, sideDirection, sideSpeed, NoRotation, 0);
 	}
 }
