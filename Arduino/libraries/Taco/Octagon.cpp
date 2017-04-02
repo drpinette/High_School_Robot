@@ -245,7 +245,7 @@ void RobotController::extinguish(bool on)
 {
 servo.attach(EXTINGUISHER);
 servo.write(on ? 180 : 0);
-delay(on ? 2000 : 2000);
+delay(on ? 20000 : 2000);
 servo.detach();
 }
 
